@@ -12,22 +12,23 @@ class WppParser:
         with open(self.fileName, encoding="utf8") as file:
             file_contents = file.read()
             file_lines = file_contents.split("\n")
-        
+
         linesMatrix = list()
         for line in file_lines:
             time = self.getDate(self, line)
             user = self.getUser(self, line)
             content = self.getContent(self, line)
-            # Check if time is None
+            # Check if any field returned None
             if time is None or user is None or content is None:
                 continue
-            
+
             linesList = [time, user, content]
             linesMatrix.append(linesList)
-        
-        df = pd.DataFrame(linesMatrix, columns=["Time", "User","Message"])
+
+        df = pd.DataFrame(linesMatrix, columns=["Time", "User", "Message"])
         df.to_csv(csvName, encoding='utf-8')
-            
+
+        return
 
     """
     line: string with a message line
@@ -79,9 +80,21 @@ class WppParser:
         timestamp = datetime.datetime(year, month, day, hour, minute, second)
         return timestamp
 
+    """
+    line: (string) with raw message line
+    return: (string) user who sent the message
+    """
+    def getUser(self, line):
+        # TODO
+        return
 
-# line = "[2/2/18, 5:32:54 PM] Nicolas Perez: Bora jogar um fut amn"
-# print(getDate(line))
+    """
+    line: (string) with raw message line
+    return: (string) message content
+    """
+    def getContent(self, line):
+        # TODO
+        return
 
 
 # if __name__ == "__main__":
