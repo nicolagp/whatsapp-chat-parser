@@ -1,2 +1,6 @@
 # Ignore all test txt files
 *.txt
+
+# ignore .pyc
+__pycache__
+*.pyc

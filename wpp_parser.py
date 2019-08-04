@@ -41,8 +41,10 @@ class WppParser:
         PM_or_AM = date_string[-2:]
         date_string = date_string[:-2]
         timestamp = dt.datetime.strptime(date_string, "%m/%d/%y, %H:%M:%S ")
-        if PM_or_AM == "PM":
-            timestamp = timestamp + dt.timedelta(hours = 12)
+        if PM_or_AM == "PM" and timestamp.hour < 12:
+            timestamp = timestamp + dt.timedelta(hours=12)
+        elif PM_or_AM == "AM" and timestamp.hour == 12:
+            timestamp = timestamp - dt.timedelta(hours=12)
 
         return timestamp
 
