@@ -1,0 +1,13 @@
+{
+    "python.pythonPath": "C:\\Users\\nicol\\Anaconda3\\python.exe",
+    // Linting
+    "python.linting.pylintEnabled": false,
+    "python.linting.pep8Enabled": true,
+    "python.linting.enabled": true,
+
+    // Ruler
+    "editor.rulers": [79],
+    "workbench.colorCustomizations": {
+        "editorRuler.foreground": "#333333"
+    }
+}
