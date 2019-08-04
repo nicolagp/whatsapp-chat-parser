@@ -64,8 +64,9 @@ class WppParser:
     return: (string) message content
     """
     def getContent(self, line):
-        # TODO
-        return
+        line = line[line.find("]"):]
+        content = line[line.find(":")+2:]
+        return content
 
 
 # if __name__ == "__main__":

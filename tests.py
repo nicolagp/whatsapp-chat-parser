@@ -17,31 +17,37 @@ class TestDate(unittest.TestCase):
         p = wpp_parser.WppParser("")
         self.assertEqual(p.getDate(self.line1),
                          datetime.datetime(2018, 2, 2, 17, 32, 54),
-                         "test 1 failed.")
+                         "date 1 failed.")
         self.assertEqual(p.getDate(self.line2),
                          datetime.datetime(2018, 12, 20, 17, 32, 54),
-                         "test 2 failed.")
+                         "date 2 failed.")
         self.assertEqual(p.getDate(self.line3),
                          datetime.datetime(2018, 2, 20, 17, 32, 54),
-                         "test 3 failed.")
+                         "date 3 failed.")
         self.assertEqual(p.getDate(self.line4),
                          datetime.datetime(2018, 12, 2, 5, 32, 54),
-                         "test 4 failed.")
+                         "date 4 failed.")
         self.assertEqual(p.getDate(self.line5),
                          datetime.datetime(2018, 2, 2, 12, 0, 0),
-                         "test 5 failed.")
+                         "date 5 failed.")
         self.assertEqual(p.getDate(self.line6),
                          datetime.datetime(2018, 2, 2, 0, 0, 0),
-                         "test 6 failed.")
+                         "date 6 failed.")
         self.assertEqual(p.getDate(self.line7),
                          datetime.datetime(2018, 2, 20, 2, 0, 0),
-                         "test 7 failed.")
+                         "date 7 failed.")
 
     def test_user(self):
         p = wpp_parser.WppParser("")
-        self.assertEqual(p.getUser(self.line1), "Juan Rodrigues", "test 1 failed.")
-        self.assertEqual(p.getUser(self.line2), "Nicolas", "test 2 failed.")
-        self.assertEqual(p.getUser(self.line3), "Pedro Accorsi", "test 3 failed.")
+        self.assertEqual(p.getUser(self.line1), "Juan Rodrigues", "user 1 failed.")
+        self.assertEqual(p.getUser(self.line2), "Nicolas", "user 2 failed.")
+        self.assertEqual(p.getUser(self.line3), "Pedro Accorsi", "tuserest 3 failed.")
+
+    def test_content(self):
+        p = wpp_parser.WppParser("")
+        self.assertEqual(p.getContent(self.line1), "Ae queridos", "content 1 failed.")
+        self.assertEqual(p.getContent(self.line2), "🙌🏻🙌🏻 é isso", "content 2 failed.")
+        self.assertEqual(p.getContent(self.line3), "q nem em 2017", "content 3 failed.")
 
 if __name__ == '__main__':
     unittest.main()
