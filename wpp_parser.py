@@ -53,8 +53,11 @@ class WppParser:
     return: (string) user who sent the message
     """
     def getUser(self, line):
-        # TODO
-        return
+        match = re.search("\].*:", line)
+        if match is None:
+            return None
+        user = match.group()[2:-1]
+        return user
 
     """
     line: (string) with raw message line
