@@ -13,9 +13,9 @@ class WppParser:
 
         lines_matrix = list()
         for line in file_lines:
-            time = self.get_date(self, line)
-            user = self.get_user(self, line)
-            content = self.get_content(self, line)
+            time = self.get_date(line)
+            user = self.get_user(line)
+            content = self.get_content(line)
             # Check if any field returned None
             if time is None or user is None or content is None:
                 continue
@@ -39,7 +39,11 @@ class WppParser:
         date_string = line[1:end]
         pm_or_am = date_string[-2:]
         date_string = date_string[:-2]
-        timestamp = dt.datetime.strptime(date_string, "%m/%d/%y, %H:%M:%S ")
+        try:
+            timestamp = dt.datetime.strptime(date_string, "%m/%d/%y, %H:%M:%S ")
+        except ValueError:
+            return None
+
         if pm_or_am == "PM" and timestamp.hour < 12:
             timestamp = timestamp + dt.timedelta(hours=12)
         elif pm_or_am == "AM" and timestamp.hour == 12:
@@ -51,6 +55,7 @@ class WppParser:
     line: (string) with raw message line
     return: (string) user who sent the message
     """
+
     def get_user(self, line):
         # match = re.search("\].*:", line)
         # if match is None:
@@ -61,17 +66,22 @@ class WppParser:
         end = line.find(':', start)
         if start == -1 or end == -1:
             return None
-        return line[start+2:end]
+        return line[start + 2:end]
 
     """
     line: (string) with raw message line
     return: (string) message content
     """
+
     def get_content(self, line):
         line = line[line.find("]"):]
-        content = line[line.find(":")+2:]
+        content = line[line.find(":") + 2:]
         return content
 
 
-# if __name__ == "__main__":
-#     main()
+def main():
+    parser = WppParser('_chat.txt')
+    parser.to_csv('test.csv')
+
+if __name__ == '__main__':
+    main()
