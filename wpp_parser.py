@@ -1,31 +1,30 @@
 import pandas as pd
 import datetime as dt
-import re
 
 
 class WppParser:
     def __init__(self, file):
         self.fileName = file
 
-    def toCSV(self, csvName):
+    def to_csv(self, csv_name):
         with open(self.fileName, encoding="utf8") as file:
             file_contents = file.read()
             file_lines = file_contents.split("\n")
 
-        linesMatrix = list()
+        lines_matrix = list()
         for line in file_lines:
-            time = self.getDate(self, line)
-            user = self.getUser(self, line)
-            content = self.getContent(self, line)
+            time = self.get_date(self, line)
+            user = self.get_user(self, line)
+            content = self.get_content(self, line)
             # Check if any field returned None
             if time is None or user is None or content is None:
                 continue
 
-            linesList = [time, user, content]
-            linesMatrix.append(linesList)
+            lines_list = [time, user, content]
+            lines_matrix.append(lines_list)
 
-        df = pd.DataFrame(linesMatrix, columns=["Time", "User", "Message"])
-        df.to_csv(csvName, encoding='utf-8')
+        df = pd.DataFrame(lines_matrix, columns=["Time", "User", "Message"])
+        df.to_csv(csv_name, encoding='utf-8')
 
         return
 
@@ -34,16 +33,16 @@ class WppParser:
     return: datetime with the time of the message, or None if the line doesn't
     contain a timestamp
     """
-    def getDate(self, line):
+    def get_date(self, line):
         # Date str is of format: "[2/2/18, 5:32:54 PM]"
         end = line.find("]")
-        date_string = line[1:end]      
-        PM_or_AM = date_string[-2:]
+        date_string = line[1:end]
+        pm_or_am = date_string[-2:]
         date_string = date_string[:-2]
         timestamp = dt.datetime.strptime(date_string, "%m/%d/%y, %H:%M:%S ")
-        if PM_or_AM == "PM" and timestamp.hour < 12:
+        if pm_or_am == "PM" and timestamp.hour < 12:
             timestamp = timestamp + dt.timedelta(hours=12)
-        elif PM_or_AM == "AM" and timestamp.hour == 12:
+        elif pm_or_am == "AM" and timestamp.hour == 12:
             timestamp = timestamp - dt.timedelta(hours=12)
 
         return timestamp
@@ -52,18 +51,23 @@ class WppParser:
     line: (string) with raw message line
     return: (string) user who sent the message
     """
-    def getUser(self, line):
-        match = re.search("\].*:", line)
-        if match is None:
+    def get_user(self, line):
+        # match = re.search("\].*:", line)
+        # if match is None:
+        #     return None
+        # user = match.group()[2:-1]
+        # return user
+        start = line.find(']')
+        end = line.find(':', start)
+        if start == -1 or end == -1:
             return None
-        user = match.group()[2:-1]
-        return user
+        return line[start+2:end]
 
     """
     line: (string) with raw message line
     return: (string) message content
     """
-    def getContent(self, line):
+    def get_content(self, line):
         line = line[line.find("]"):]
         content = line[line.find(":")+2:]
         return content
